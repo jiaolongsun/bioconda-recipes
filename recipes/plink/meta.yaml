@@ -1,0 +1,33 @@
+package:
+  name: "plink"
+  version: "1.90b6.12"
+
+build:
+  number: 1
+  skip: True  # [osx]
+
+source:
+  url: https://github.com/chrchang/plink-ng/archive/4dedbc25be8a5a43722e24c19dadd6a29a77599c.zip
+  sha256: 8ea1861b1a3a79ed39426d9b52610130ab0406ed5825858d0403a5c24e84ca21
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+  host:
+    - openblas
+    - zlib
+  run:
+    - openblas
+    - zlib
+
+test:
+  commands:
+    - plink --help | grep "PLINK v1.90b6.12"
+
+about:
+  home: https://www.cog-genomics.org/plink2
+  license: GPL
+  license_file: 1.9/LICENSE
+  summary: Whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner.

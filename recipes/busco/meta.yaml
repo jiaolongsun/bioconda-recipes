@@ -1,33 +1,63 @@
+{% set version = "4.1.2" %}
+{% set sha256 = "c4fb4bd442c17a7b5be00d451a6eeb2d328791c288caac45bdc50f4feaffa3a6" %}
+
 package:
   name: busco
-  version: "1.2"
+  version: {{ version }}
 
 build:
-  number: 1
+  number: 2
+  skip: True  # [py<33]
 
 source:
-  fn: busco-v1.2.tar.gz
-  url: http://busco.ezlab.org/files/BUSCO_v1.2.tar.gz
-  md5: 4b4551ccdbc8e64d18295fc8d8729d84
+  url: https://gitlab.com/ezlab/busco/-/archive/4.1.2/busco-4.1.2.tar.gz
+  sha256: {{ sha256 }}
+  patches:
+    - 0001-Add-default-config-path-within-prefix.patch
 
 requirements:
-  build:
-    - python  
+  host:
+    - python
+    - pip
+    - findutils
+    - blast >=2.10.1 # There is a multithreading problem for all BLAST versions between 2.4 and 2.10.0
+    - hmmer >=3.1b2 # sepp needs this version
+    - augustus >=3.3
+    - biopython
+    - prodigal
+    - sepp >=4.3.10
   run:
     - python
-    - blast
-    - hmmer
-      #    - emboss
-
-about:
-  home: http://busco.ezlab.org/
-  license: GPL
-  summary: BUSCO provides measures for quantitative assessment of genome 
-           assembly, gene set, and transcriptome completeness based on 
-           evolutionarily informed expectations of gene content from 
-           near-universal single-copy orthologs selected from OrthoDB. 
+    - findutils
+    - blast >=2.10.1 # There is a multithreading problem for all BLAST versions between 2.4 and 2.10.0
+    - hmmer >=3.1b2 # sepp needs this version
+    - augustus >=3.3
+    - biopython
+    - r-base
+    - r-ggplot2 >=2.2.1
+    - prodigal
+    - sepp >=4.3.10
 
 test:
   commands:
-    - BUSCO_v1.2.py -h > /dev/null
-    - busco -h > /dev/null
+    - busco -h
+    - generate_plot.py -h
+    - python -c 'import busco.ConfigManager as cm; print(cm.BuscoConfigManager({}).get_config_file())'
+
+about:
+  home: http://busco.ezlab.org/
+  license: MIT
+  license_file: LICENSE
+  summary: BUSCO provides measures for quantitative assessment of genome
+           assembly, gene set, and transcriptome completeness based on
+           evolutionarily informed expectations of gene content from
+           near-universal single-copy orthologs selected from OrthoDB.
+
+extra:
+  identifiers:
+    - biotools:busco
+    - doi:10.1093/bioinformatics/btv351
+  recipe-maintainers:
+    - silask
+    - matsepp
+    - berkelem

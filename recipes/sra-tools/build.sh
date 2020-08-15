@@ -1,49 +1,54 @@
 #!/bin/bash
 
-NGS_SDK_VERSION=1.2.5
-NCBI_VDB_VERSION=2.7.0
+export CFLAGS="-I$PREFIX/include"
+export LDFLAGS="-L$PREFIX/lib"
+export CPATH=${PREFIX}/include
 
-# download extra sources using conda's mechanism
-# see: https://github.com/stuarteberg/conda-multisrc-example
-CONDA_PYTHON=$(conda info --root)/bin/python
-${CONDA_PYTHON} ${RECIPE_DIR}/download-extra-sources.py
+NCBI_OUTDIR=$SRC_DIR/ncbi-outdir
 
-WORK_DIR=`dirname $SRC_DIR`
-SRC_SDK=$WORK_DIR/ngs-sdk/ngs-${NGS_SDK_VERSION}
-SRC_VDB=$WORK_DIR/ncbi-vdb/ncbi-vdb-${NCBI_VDB_VERSION}
+if [[ $OSTYPE == darwin* ]]; then
+     export CFLAGS="${CFLAGS} -i sysroot ${CONDA_BUILD_SYSROOT}"
+     export LDFLAGS="${LDFLAGS} -headerpad_max_install_names"
+fi
 
-####
-# build ngs-sdk
-####
+export PATH=$BUILD_PREFIX/bin:$PATH
 
-cd $SRC_SDK
-# First configure fails
-# See: https://github.com/ncbi/ngs/issues/1
-./configure --prefix=$PREFIX/ --build-prefix=$PREFIX/share/ncbi
-make -C ngs-sdk
+ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $BUILD_PREFIX/bin/gcc
+ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-c++ $BUILD_PREFIX/bin/g++
+ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-cc $BUILD_PREFIX/bin/cc
+ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-c++ $BUILD_PREFIX/bin/c++
+ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ar $BUILD_PREFIX/bin/ar
+ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $BUILD_PREFIX/bin/ld
 
-./configure --prefix=$PREFIX/ --build-prefix=$PREFIX/share/ncbi
-make -C ngs-sdk install
 
-####
-# build ncbi-vdb
-####
+pushd ncbi-vdb
+./configure \
+    --prefix=$PREFIX \
+    --build-prefix=$NCBI_OUTDIR \
+    --with-ngs-sdk-prefix=$PREFIX
+make -j${CPU_COUNT}
+popd
 
-cd $SRC_VDB
-./configure --prefix=$PREFIX/ \
-	    --build-prefix=$PREFIX/share/ncbi \
-            --with-ngs-sdk-prefix=$PREFIX
+pushd sra-tools
+
+pushd tools/driver-tool/utf8proc
+make -j${CPU_COUNT}
+popd
+
+./configure \
+    --prefix=$PREFIX \
+    --build-prefix=$NCBI_OUTDIR \
+    --with-ngs-sdk-prefix=$PREFIX \
+    --with-ncbi-vdb-build=$NCBI_OUTDIR
+make -j${CPU_COUNT}
 make install
+popd
 
-####
-# build sra-tools
-####
-
-cd $SRC_DIR
-./configure --prefix=$PREFIX \
-	--build-prefix=$PREFIX/share/ncbi/ \
-	--with-ncbi-vdb-sources=$SRC_VDB \
-	--with-ncbi-vdb-build=$PREFIX/share/ncbi/ncbi-vdb \
-	--with-ngs-sdk-prefix=$PREFIX
-
-make install
+# Strip package version from binary names
+cd $PREFIX/bin
+ln -s fastq-dump-orig.$PKG_VERSION fastq-dump-orig
+ln -s fasterq-dump-orig.$PKG_VERSION fasterq-dump-orig
+ln -s prefetch-orig.$PKG_VERSION prefetch-orig
+ln -s sam-dump-orig.$PKG_VERSION sam-dump-orig
+ln -s srapath-orig.$PKG_VERSION srapath-orig
+ln -s sra-pileup-orig.$PKG_VERSION sra-pileup-orig

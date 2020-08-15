@@ -1,28 +1,46 @@
+{% set version = "1.48.0" %}
+{% set name = "CGHbase" %}
+{% set bioc = "3.11" %}
+
 package:
-  name: bioconductor-cghbase
-  version: 1.32.0
+  name: 'bioconductor-{{ name|lower }}'
+  version: '{{ version }}'
 source:
-  fn: CGHbase_1.32.0.tar.gz
-  url: https://bioarchive.galaxyproject.org/CGHbase_1.32.0.tar.gz
-  md5: 905e8bac8f42dd1b0eaf22bdb148743a
+  url:
+    - 'https://bioconductor.org/packages/{{ bioc }}/bioc/src/contrib/{{ name }}_{{ version }}.tar.gz'
+    - 'https://bioarchive.galaxyproject.org/{{ name }}_{{ version }}.tar.gz'
+    - 'https://depot.galaxyproject.org/software/bioconductor-{{ name|lower }}/bioconductor-{{ name|lower }}_{{ version }}_src_all.tar.gz'
+  md5: e848c931bfa4ff07eefb8f2b4fadfdad
 build:
-  number: 1
+  number: 0
   rpaths:
     - lib/R/lib/
     - lib/
+  noarch: generic
 requirements:
-  build:
-    - 'bioconductor-biobase >=2.5.5'
-    - bioconductor-marray
-    - r
+  host:
+    - 'bioconductor-biobase >=2.48.0,<2.49.0'
+    - 'bioconductor-marray >=1.66.0,<1.67.0'
+    - r-base
   run:
-    - 'bioconductor-biobase >=2.5.5'
-    - bioconductor-marray
-    - r
+    - 'bioconductor-biobase >=2.48.0,<2.49.0'
+    - 'bioconductor-marray >=1.66.0,<1.67.0'
+    - r-base
 test:
   commands:
-    - '$R -e "library(''CGHbase'')"'
+    - '$R -e "library(''{{ name }}'')"'
 about:
-  home: http://bioconductor.org/packages/release/bioc/html/CGHbase.html
+  home: 'https://bioconductor.org/packages/{{ bioc }}/bioc/html/{{ name }}.html'
   license: GPL
-  summary: 'Contains functions and classes that are needed by arrayCGH packages.'
+  summary: 'CGHbase: Base functions and classes for arrayCGH data analysis.'
+  description: 'Contains functions and classes that are needed by arrayCGH packages.'
+  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3'
+extra:
+  identifiers:
+    - biotools:cghbase
+    - doi:10.1016/j.ejmg.2005.10.046
+  parent_recipe:
+    name: bioconductor-cghbase
+    path: recipes/bioconductor-cghbase
+    version: 1.40.0
+

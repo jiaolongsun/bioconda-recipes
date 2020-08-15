@@ -1,0 +1,36 @@
+{% set name = "ntcard" %}
+{% set version = "1.2.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+build:
+  number: 0
+
+source:
+  url: https://github.com/bcgsc/ntCard/releases/download/{{ version }}/ntcard-{{ version }}.tar.gz
+  sha256: 2d635dec6e293780a5ae2b7bb422ff5cc825a03270b507f5061cbf0f09ee7076
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - automake
+    - autoconf
+    - llvm-openmp # [osx]
+  host:
+    - perl
+    - zlib
+  run:
+    - zlib
+    - llvm-openmp
+
+test:
+  commands:
+    - ntcard --help
+
+about:
+  home: https://github.com/bcgsc/ntCard
+  license: GPL-3.0
+  license_file: LICENSE
+  summary: 'Estimating k-mer coverage histogram of genomics data'

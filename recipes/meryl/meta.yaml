@@ -1,0 +1,32 @@
+{% set name = "meryl" %}
+{% set version = "v1.0" %}
+{% set sha256 = "6bf221b021c857ef6268494ca024f7cb7485d77df05883545f850ec3bb5986dd" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+about:
+  home: 'https://github.com/marbl/meryl'
+  summary: "meryl is a multi-threaded, multi-process, out-of-core k-mer counter"
+  license: PUBLIC DOMAIN
+  license_file: README.license
+
+source:
+  url: https://github.com/marbl/{{ name }}/archive/{{ version }}.tar.gz 
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  skip: True # [osx]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+
+test:
+  commands:
+    - "meryl 2>&1 | grep 'usage: meryl'"
+    - "meryl-lookup 2>&1 | grep 'usage: meryl-lookup'"
+    - "meryl-import 2>&1 | grep 'usage: meryl-import'"
+    - "sequence 2>&1 | grep 'usage: sequence'"

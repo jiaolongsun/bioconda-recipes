@@ -1,0 +1,30 @@
+{% set version = "1.3.1" %}
+{% set sha256 = "ed4dffe7774125281c09fbf7a9c352cec1677712c8581ca19f5462d68ee06a1f" %}
+
+package:
+  name: irfinder
+  version: '{{ version }}'
+
+source:
+  url: https://github.com/williamritchie/IRFinder/archive/v{{ version }}.tar.gz
+  sha256: '{{ sha256 }}'
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - '{{ compiler("c") }}'
+  run:
+    - perl
+    - r-base
+
+test:
+  commands:
+    - IRFinder -v
+
+about:
+  home: https://github.com/williamritchie/IRFinder
+  license: MIT
+  license_family: MIT
+  summary: Intron Retention Finder

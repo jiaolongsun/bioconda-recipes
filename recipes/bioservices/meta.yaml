@@ -1,67 +1,44 @@
+{% set name = "bioservices" %}
+{% set version = "1.7.8" %}
+{% set sha256 = "c7ff4b9e70ce80ed54bbf212b29cdfe150289f4cf99cd2ffb8c7e90390aed03b" %}
+
 package:
-  name: bioservices
-  version: "1.4.10"
+  name: {{ name }}
+  version: {{ version }}
 
 source:
-  git_url: https://github.com/cokelaer/bioservices.git
-  git_rev: de2d302
-
-#  patches:
-   # List any patch files here
-   # - fix.patch
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
 
 build:
-  skip: False
-  number: 1
+  noarch: python
+  number: 0
 
 requirements:
-  build:
+  host:
     - python
     - setuptools
-    - grequests
-    - requests
-    - requests-cache
-    - easydev
-    - beautifulsoup4
-    - suds-jurko
-    - appdirs
-    - wrapt
 
   run:
     - python
     - grequests
     - requests
     - requests-cache
-    - easydev
+    - easydev >=0.9.36
     - beautifulsoup4
     - suds-jurko
     - appdirs
     - wrapt
+    - numpydoc
+    - pandas
 
 test:
-  # Python imports
   imports:
     - bioservices
     - bioservices.apps
     - bioservices.mapping
 
-  # commands:
-    # You can put test commands to be run here.  Use this to test that the
-    # entry points work.
-
-
-  # You can also put a file called run_test.py in the recipe that will be run
-  # at test time.
-
-  # requires:
-    # Put any additional test requirements here.  For example
-    # - nose
-
 about:
-  home: ['http://pypi.python.org/pypi/bioservices']
-  license: GNU Library or Lesser General Public License (LGPL)
+  home: http://pypi.python.org/pypi/bioservices
+  license: GPLv3
   summary: 'Access to Biological Web Services from Python'
-
-# See
-# http://docs.continuum.io/conda/build.html for
-# more information about meta.yaml

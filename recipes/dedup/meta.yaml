@@ -1,0 +1,28 @@
+{% set version = "0.12.6" %}
+
+package:
+  name: dedup
+  version: {{ version }}
+
+source:
+  url: https://github.com/apeltzer/dedup/releases/download/{{ version }}/DeDup-{{ version }}.jar
+  md5: 1b35378e2f376e6b7e1c5d5d413ab5fb
+
+build:
+  noarch: generic
+  number: 0
+
+requirements:
+  run:
+    - openjdk
+    - python
+
+test:
+  commands:
+    - dedup -h  >/dev/null
+    - dedup -v
+
+about:
+  home: https://github.com/apeltzer/dedup
+  license: GPLv3
+  summary: "DeDup is a tool for read deduplication in paired-end read merging (e.g. for ancient DNA experiments)."

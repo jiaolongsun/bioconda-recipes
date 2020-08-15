@@ -1,0 +1,47 @@
+package:
+  name: presto
+  version: "0.6.1"
+
+source:
+  url: https://files.pythonhosted.org/packages/41/30/1fdec00bcc015585e375307749702a47d7b6d215c9034c3db72a5fb3221c/presto-0.6.1.tar.gz
+  sha256: 556ec60a0c66e6ef0ef594e5e73caee1fa6e4f60f57a793a7c29b294bc621af8
+
+build:
+  number: 0
+  noarch: python
+
+requirements:
+  host:
+    - python >=3
+    - setuptools
+  run:
+    - python >=3
+    - numpy >=1.8
+    - scipy >=0.14
+    - pandas >=0.24
+    - biopython >=1.71
+    - blast >=2.5
+    - muscle >=3.8
+    - vsearch >=2.3.2
+
+test:
+  commands:
+    - AlignSets.py --version
+    - AssemblePairs.py --version
+    - BuildConsensus.py --version
+    - ClusterSets.py --version
+    - CollapseSeq.py --version
+    - ConvertHeaders.py --version
+    - EstimateError.py --version
+    - FilterSeq.py --version
+    - MaskPrimers.py --version
+    - PairSeq.py --version
+    - ParseHeaders.py --version
+    - ParseLog.py --version
+    - SplitSeq.py --version
+
+about:
+  home: https://presto.readthedocs.io
+  license: AGPL-3.0
+  summary: 'A bioinformatics toolkit for processing high-throughput lymphocyte receptor sequencing data.'
+  license_family: AGPL

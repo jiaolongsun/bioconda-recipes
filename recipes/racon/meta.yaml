@@ -1,0 +1,37 @@
+{% set name = "Racon" %}
+{% set version = "1.4.13" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+build:
+  number: 0
+
+source:
+  url: https://github.com/lbcb-sci/racon/releases/download/{{ version }}/racon-v{{ version }}.tar.gz
+  sha256: 4220e98bf84768483bd94eef62a0821cffc74f4e7139c74685c08161909263b0
+  patches:
+    - racon_wrapper.patch
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake
+  host:
+    - zlib
+  run:
+    - zlib
+    - python
+
+test:
+  commands:
+    - racon --version
+    - rampler -h
+    - racon_wrapper -h
+
+about:
+  home: https://github.com/lbcb-sci/racon
+  license: MIT
+  license_file: LICENSE
+  summary: Ultrafast consensus module for raw de novo genome assembly of long uncorrected reads.

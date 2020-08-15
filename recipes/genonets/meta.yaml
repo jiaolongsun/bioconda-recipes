@@ -1,0 +1,36 @@
+package:
+  name: genonets
+  version: "1.1.8"
+
+build:
+  noarch: python
+  number: 0
+  script: {{ PYTHON }} -m pip install . --ignore-installed --no-deps -vv
+
+source:
+  url: https://files.pythonhosted.org/packages/dc/c5/2eecaf45f1b35fab80d04c860acb6204233c82b928105575a10c9a11d2c1/genonets-1.1.8.tar.gz
+  sha256: f6a5ecf662c16e29c327e041b69bc8531b886c3b6f8040a64ff3da5af657b0fb
+
+requirements:
+  host:
+    - python
+    - pip
+  run:
+    - python
+    - python-igraph >=0.7.1.post6
+    - numpy >=1.8.2
+
+test:
+  imports:
+    - genonets
+
+about:
+  home: https://github.com/fkhalid/genonets
+  license: MIT License
+  summary: 'Framework for creating and analyzing genotype networks from data.'
+  license_family: MIT
+
+extra:
+  identifiers:
+    - biotools:genonets
+    - doi:10.1093/nar/gkw313

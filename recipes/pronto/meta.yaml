@@ -1,34 +1,43 @@
 package:
   name: pronto
-  version: "0.3.3"
+  version: "2.2.2"
 
 source:
-  fn: pronto-0.3.3.tar.gz
-  url: https://pypi.python.org/packages/43/0b/abfdb921e0c869d4ee2f31b9e68cbc55ea07c57a45eb7054ad3b27b05965/pronto-0.3.3.tar.gz
-  md5: 512eee78637add914a1b62195007aa2c
+  url: https://files.pythonhosted.org/packages/ee/ae/3895239606f15447f8d61a91eacd556bd07f6384ef915dcfedc00828612e/pronto-2.2.2.zip
+  sha256: 2b4272c11de7f32bb9ce75a2a83773e9e29fb958bd2055b42a161eb8f7a1688f
 
 build:
-  skip: True # [py3k]
+  noarch: python
   number: 0
+  script: {{ PYTHON }} -m pip install . --ignore-installed --no-deps -vv
 
 requirements:
-  build:
-    - python >=2.7,<3
-    - setuptools
-    - lxml
-    - six
-
+  host:
+    - python >=3.6
+    - pip
   run:
-    - python >=2.7,<3
-    - lxml
-    - six
+    - python >=3.6
+    - chardet >=3.0
+    - fastobo >=0.8.2
+    - networkx >=2.3
+    - python-dateutil >=2.8
+    - frozendict
 
 test:
   imports:
     - pronto
-    - pronto.parser
+    - pronto.logic
+    - pronto.utils
+    - pronto.parsers
+    - pronto.serializers
 
 about:
   home: http://github.com/althonos/pronto
-  license: GNU General Public License v3 (GPLv3)
-  summary: 'Python frontend to ontologies - a library to parse, create, browse and export ontologies.'
+  license: MIT
+  summary: 'Python frontend to ontologies'
+  license_family: MIT
+
+extra:
+  recipe-maintainers:
+    - althonos
+

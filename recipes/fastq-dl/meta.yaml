@@ -1,0 +1,34 @@
+{% set version = "1.0.4" %}
+
+package:
+  name: fastq-dl
+  version: {{ version }}
+
+source:
+  url: https://github.com/rpetit3/fastq-dl/archive/v{{ version }}.tar.gz
+  sha256: 0eab7590dee6f83c991bda58b718c3201674fbfff2610b8d39bff7a6a6570cbe
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  run:
+    - executor
+    - pigz
+    - python >=3.6
+    - requests
+    - sra-tools >=2.9
+    - wget
+
+test:
+  commands:
+    - fastq-dl
+    - fastq-dl --version
+    - fastq-dl -h
+
+about:
+  home: https://github.com/rpetit3/fastq-dl
+  license: MIT
+  license_file: LICENSE
+  summary: A tool to download FASTQs associated with Study, Experiment, or Run accessions.

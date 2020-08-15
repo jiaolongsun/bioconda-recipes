@@ -1,0 +1,42 @@
+{% set name = "pydna" %}
+{% set version = "3.0.2" %}
+{% set hash = "2890ef582e07e1c787bab51f1081a1e2f0e9d0a00bb4f7ccab320a8a7ba8699e" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+build:
+  number: 0
+  noarch: python
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv
+
+source:
+  url: https://github.com/BjornFJohansson/{{ name|lower }}/archive/{{ version }}.tar.gz
+  sha256: {{ hash }}
+
+requirements:
+  host:
+  - python >=3
+  - pip
+  - pytest-runner
+  run:
+  - python >=3
+  - biopython >=1.65
+  - networkx >=1.8.1
+  - appdirs >=1.3.0
+  - prettytable >=0.7.2
+  - ordered-set >=2.0.1
+  - pyparsing >=2.1.10
+  - requests >=2.12
+
+test:
+  imports:
+    - pydna
+
+about:
+  home: https://github.com/BjornFJohansson/pydna
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE.txt
+  summary: 'Representing double stranded DNA and simulating cloning, homologous recombination, Gibson assembly, Gel electrophoresis etc.'

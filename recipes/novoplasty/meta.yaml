@@ -1,0 +1,39 @@
+{% set name = "NOVOPlasty" %}
+{% set version = "4.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/ndierckx/NOVOPlasty/archive/NOVOPlasty{{ version }}.tar.gz
+  sha256: ed8647f93e4f07689647150652980f96298af8bb78af2556d078a811d9661396
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  host:
+    - perl
+    - perl-module-build
+
+  run:
+    - perl
+
+test:
+  commands:
+    - NOVOPlasty{{ version }}.pl 2>&1 | grep "Can't open the configuration file, please check the manual!"
+    - NOVOPlasty.pl 2>&1 | grep "Can't open the configuration file, please check the manual!" 
+    - filter_reads.pl 2>&1 | grep "You need to give a reference sequence and forward/reverse read files!"
+
+about:
+  home: https://github.com/ndierckx/NOVOPlasty
+  summary: "The organelle assembler and heteroplasmy caller"
+  license: other
+  license_file: LICENSE
+  description: |
+    NOVOPlasty is a de novo assembler for short circular genomes.
+extra:
+  identifiers:
+    - doi:10.1093/nar/gkw955
